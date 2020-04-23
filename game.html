@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+      header{
+        font-size: 32px;
+        font-weight: bold;
+        color: #000;
+        padding-bottom: 16px;
+      }
+      button, #text{
+        margin-top: 24px;
+       
+      }
+    </style>
+</head>
+<body>
+   <header id="header">Generate the Number</header>
+  <div id="container"></div>
+  <button onclick="generateRandomNumber()" id="generate-btn">Generate</button> 
+  <div id="text"></div>
+
+  <script>
+  var container = document.getElementById("container");
+  var textContent=document.getElementById("text");
+  var header=document.getElementById("header");
+  var generateButton=document.getElementById("generate-btn");
+  
+  function checkAnswer(input){
+      var ganaratedNumber = localStorage.getItem('random_number');
+      var count = 0;
+      var inputArr = input.split('');
+      var storedArr = ganaratedNumber.split('');
+      for(var i = 0; i < inputArr.length; i++){
+        if(inputArr[i] == storedArr[i]){
+            count++;
+        }else{
+          break;
+        }
+      }
+      return count;
+  }
+ function guessNumber(){
+  generateButton.style.display = "none";
+      header.innerHTML = "Guess the Number";
+      textContent.innerHTML = "";
+      container.innerHTML = "";
+      var guessedInput = document.createElement("input");
+      var submitButton = document.createElement("button");
+      var replayButton = document.createElement("button");
+      submitButton.innerHTML = "Guess";
+      replayButton.innerHTML = "Replay Game";
+      container.appendChild(guessedInput);
+      container.appendChild(submitButton);
+      container.appendChild(replayButton);
+      submitButton.addEventListener("click", function(){
+          if(!guessedInput.value){
+            alert("Please Enter your Guess");
+          }else{
+            var answer = checkAnswer(guessedInput.value);
+            textContent.innerHTML = answer + " correct guesses!";
+          }
+      });
+      replayButton.addEventListener("click",function(){
+        startGame();
+      });
+   
+ }
+function generateRandomNumber(){
+  var randomNumber= Math.floor((Math.random() * 900000) + 100000);
+  container.innerHTML= randomNumber;
+  textContent.innerHTML= '<p> Refreshing Page After 10 seconds</p>';
+  window.setTimeout(guessNumber,10000);
+  return randomNumber; 
+}
+function startGame(){
+  container.innerHTML = "";
+  generateButton.style.display = "block";
+  header.innerHTML = "Generate the Number";
+  generateButton.innerHTML = "Generate";
+  textContent.innerHTML = "";
+  
+}
+generateButton.addEventListener("click",function(){
+  var random_number = generateRandomNumber();
+  window.localStorage.setItem("random_number",random_number);
+});
+</script>
+</body>
+</html>
